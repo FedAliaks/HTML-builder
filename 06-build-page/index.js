@@ -17,10 +17,6 @@ try {
     }
   })
 
-
-
-
-
   //copy styles
   fs.stat(path.join(__dirname, 'project-dist', 'style.css'), (err) => {
     if (err) {
@@ -32,7 +28,6 @@ try {
     }
   });
 
-
   const pathToSourceStylesFolder = path.join(__dirname, 'styles');
   const pathToGoalStyles = path.join(__dirname, 'project-dist', 'style.css');
 
@@ -40,7 +35,7 @@ try {
     if(err) {
       console.log(err);
     }
-  
+
     files.forEach(item => {
       const pathToStylesFile = path.join(pathToSourceStylesFolder, item);
       fs.readFile(pathToStylesFile, (err, content) => {
@@ -54,8 +49,7 @@ try {
         })
       })
     })
-  
-  })
+  });
 
 
   // copy assets
@@ -72,14 +66,12 @@ try {
   const pathToSourceFolderAssets = path.join(__dirname, 'assets');
   const pathToGoalFolderAssets = path.join(__dirname, 'project-dist', 'assets');
 
-
   fs.readdir(pathToSourceFolderAssets, {withFileTypes: true}, (err, files) => {
     if(err) {
       console.log(err);
     }
 
     files.forEach(item => {
-
       if(item.isDirectory()) {
         fs.stat(path.join(__dirname, 'project-dist', 'assets', item.name), (err) => {
           if(err) {
@@ -90,14 +82,12 @@ try {
             })
           }
         });
-
         copyFileFunction(path.join(pathToSourceFolderAssets, item.name), path.join(pathToGoalFolderAssets, item.name));
       }
     })
   });
 
   function copyFileFunction(pathToStartFolder, pathToGoalFolder) {
-
     fs.readdir(pathToGoalFolder, (err, files) => {
       if (err) {
         /* console.log('error') */
@@ -122,10 +112,10 @@ try {
         });
       })
     });
-
-
-
   }
+
+
+  //create HTML
 
 
 
