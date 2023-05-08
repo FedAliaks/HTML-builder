@@ -59,7 +59,7 @@ try {
 
 
   // copy assets
-/*   fs.stat(path.join(__dirname, 'project-dist', 'assets'), (err) => {
+  fs.stat(path.join(__dirname, 'project-dist', 'assets'), (err) => {
     if(err) {
       fs.mkdir(path.join(__dirname, 'project-dist', 'assets'), (err) => {
         if(err) {
@@ -73,41 +73,60 @@ try {
   const pathToGoalFolderAssets = path.join(__dirname, 'project-dist', 'assets');
 
 
-  fs.readdir(pathToSourceFolderAssets, {withFileTypes: true}, (error, files) => {
-    if(error) {
-      console.log(2)
+  fs.readdir(pathToSourceFolderAssets, {withFileTypes: true}, (err, files) => {
+    if(err) {
+      console.log(err);
     }
 
     files.forEach(item => {
 
       if(item.isDirectory()) {
-        copyFileFunction(path.join(pathToSourceFolderAssets, item.name), item.name);
+        fs.stat(path.join(__dirname, 'project-dist', 'assets', item.name), (err) => {
+          if(err) {
+            fs.mkdir(path.join(__dirname, 'project-dist', 'assets', item.name), (err) => {
+              if(err) {
+                console.log('error');
+              }
+            })
+          }
+        });
+
+        copyFileFunction(path.join(pathToSourceFolderAssets, item.name), path.join(pathToGoalFolderAssets, item.name));
       }
     })
   });
 
-  function copyFileFunction(pathToFolder, nameFolder) {
-    fs.stat(path.join(__dirname, 'project-dist', 'assets', nameFolder), (err) => {
-      if(err) {
-        fs.mkdir(path.join(__dirname, 'project-dist', 'assets', nameFolder), (err) => {
-          if(err) {
-            console.log('error');
-          }
-        })
+  function copyFileFunction(pathToStartFolder, pathToGoalFolder) {
+
+    fs.readdir(pathToGoalFolder, (err, files) => {
+      if (err) {
+        /* console.log('error') */
+      } else {
+        files.forEach(item => {
+          fs.unlink(path.join(pathToGoalFolder, item), (err) => {
+            if(err) console.log('error');
+          })
+        });
       }
-    })
+    });
 
-
-
-
-
-
-
+    fs.readdir(pathToStartFolder, (err, files) => {
+      if(err) {
+        console.log(err);
+      }
+      files.forEach(item => {
+        fs.copyFile(path.join(pathToStartFolder, item), path.join(pathToGoalFolder, item), err => {
+          if(err) {
+            console.log(err);
+          }
+        });
+      })
+    });
 
 
 
   }
- */
+
 
 
 
