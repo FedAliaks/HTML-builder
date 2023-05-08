@@ -22,73 +22,97 @@ try {
 
 
   //copy styles
-  const pathToSourceStylesFolder = path.join(__dirname, 'styles');
-  const output = fs.createWriteStream(path.join(__dirname, 'project-dist', 'style.css'));
-
-  fs.readdir(pathToSourceStylesFolder, {withFileTypes: true}, (err, files) => {
-    if(err) {
-      console.log('error');
+  fs.stat(path.join(__dirname, 'project-dist', 'style.css'), (err) => {
+    if (err) {
+      fs.writeFile(path.join(__dirname, 'project-dist', 'style.css'), '', (err) => {
+        if(err) {
+          console.log(err);
+        }
+      })
     }
+  });
+
+
+  const pathToSourceStylesFolder = path.join(__dirname, 'styles');
+  const pathToGoalStyles = path.join(__dirname, 'project-dist', 'style.css');
+
+  fs.readdir(pathToSourceStylesFolder, (err, files) => {
+    if(err) {
+      console.log(err);
+    }
+  
     files.forEach(item => {
-      const arr = [];
-      const pathToFile = path.join(__dirname, 'styles', item.name);
-      const readableStream = fs.createReadStream(pathToFile, 'utf-8');
-      readableStream.on('data', chunk => {
-        arr.push(chunk);
-      });
-      readableStream.on('end', () => {
-        output.write(arr.join(''));
-      });
+      const pathToStylesFile = path.join(pathToSourceStylesFolder, item);
+      fs.readFile(pathToStylesFile, (err, content) => {
+        if(err) {
+          console.log(err);
+        }
+        fs.appendFile(pathToGoalStyles, content, (err) => {
+          if(err) {
+            console.log(err);
+          }
+        })
+      })
     })
+  
   })
 
 
-
   // copy assets
-/*   promise.mkdir(path.join(__dirname, 'project-dist', 'assets'))
-  const pathToSourceAssetsFolder = path.join(__dirname, 'assets');
-  const pathToGoalAssetsFolder = path.join(__dirname, 'project-dist', 'assets'); */
-/*   fs.readdir(pathToGoalAssetsFolder, (err, files) => {
+/*   fs.stat(path.join(__dirname, 'project-dist', 'assets'), (err) => {
     if(err) {
-      console.log('error1');
-    }
-
-    files.forEach((item) => {
-      fs.unlink(path.join(pathToGoalAssetsFolder, item), (err) => {
+      fs.mkdir(path.join(__dirname, 'project-dist', 'assets'), (err) => {
         if(err) {
           console.log('error');
         }
       })
-    })
-
-
-  }) */
-
-/*   fs.readdir(pathToSourceAssetsFolder, (err, files) => {
-    if(err) {
-      console.log('error1')
     }
-    console.log(files);
+  })
+
+  const pathToSourceFolderAssets = path.join(__dirname, 'assets');
+  const pathToGoalFolderAssets = path.join(__dirname, 'project-dist', 'assets');
+
+
+  fs.readdir(pathToSourceFolderAssets, {withFileTypes: true}, (error, files) => {
+    if(error) {
+      console.log(2)
+    }
+
     files.forEach(item => {
-      fs.copyFile(path.join(pathToSourceAssetsFolder, item), path.join(pathToGoalAssetsFolder, item), (err) => {
-        if(err) {
-          console.log(err);
-        }
-      })
+
+      if(item.isDirectory()) {
+        copyFileFunction(path.join(pathToSourceFolderAssets, item.name), item.name);
+      }
     })
-  }) */
+  });
 
-
-
-/*   fs.readdir(pathToSourceFolder, (err, files) => {
-    files.forEach(item => {
-      fs.copyFile(path.join(pathToSourceFolder, item), path.join(pathToGoalFolder, item), err => {
-        if(err) {
-          console.log(err);
-        }
-      });
+  function copyFileFunction(pathToFolder, nameFolder) {
+    fs.stat(path.join(__dirname, 'project-dist', 'assets', nameFolder), (err) => {
+      if(err) {
+        fs.mkdir(path.join(__dirname, 'project-dist', 'assets', nameFolder), (err) => {
+          if(err) {
+            console.log('error');
+          }
+        })
+      }
     })
-  }); */
+
+
+
+
+
+
+
+
+
+
+  }
+ */
+
+
+
+
+
 } catch (error) {
   console.log('error');
 }
