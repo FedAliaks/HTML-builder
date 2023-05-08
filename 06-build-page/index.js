@@ -116,36 +116,20 @@ const promise = require('fs/promises');
 
 
   //create HTML
-
-
-
-
   async function createHtml() {
     const componentsPath = path.join(__dirname, 'components');
     const templatePath = path.join(__dirname, 'template.html');
     const goalHtmlPath = path.join(__dirname, 'project-dist', 'index.html');
-
-
     let htmlCode = await promise.readFile(templatePath, 'utf-8');
-
-
     let componentsFiles = await promise.readdir(componentsPath, { withFileTypes: true });
-
-
     for (let item of componentsFiles) {
-      console.log(item.name);
       const pathToComponentsFile = path.join(componentsPath, item.name);
       const content = await promise.readFile(pathToComponentsFile, 'utf-8');
       const regularExpression = item.name.replace(/\.[^/.]+$/, "");
       htmlCode = htmlCode.replace(`{{${regularExpression}}}`, content);
-
     };
 
-    console.log(htmlCode);
-
-
-
-
+    await promise.writeFile(goalHtmlPath, htmlCode);
   }
 
   (async () => {
