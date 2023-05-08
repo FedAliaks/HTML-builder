@@ -10,7 +10,7 @@ fs.readdir(pathToFolder, {withFileTypes: true}, (err, files) =>{
     const pathToFile = path.join(pathToFolder, item.name);
     fs.stat(pathToFile, (err, statistic) => {
       if(item.isFile()) {
-        console.log(path.parse(pathToFile).name + " - " + path.parse(pathToFile).ext.slice(1) + " - " + `${(statistic.size / 1024).toFixed(2)}Kb`);
+        console.log(path.parse(pathToFile).name + " - " + path.parse(pathToFile).ext.slice(1) + " - " + `${(statistic.size / 1000).toFixed(2)}Kb`);
       }
     })
   })
