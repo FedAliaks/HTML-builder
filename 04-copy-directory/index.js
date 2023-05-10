@@ -2,13 +2,16 @@ const path = require('path');
 const fs = require('fs');
 const promise = require('fs/promises');
 
+
+(async function() {
 try {
-  promise.mkdir(path.join(__dirname, 'files-copy'), {recursive: true});
+  await promise.rm(path.join(__dirname, 'files-copy'), { recursive: true, force: true})
+  await promise.mkdir(path.join(__dirname, 'files-copy'), {recursive: true});
 
   const pathToSourceFolder = path.join(__dirname, 'files');
   const pathToGoalFolder = path.join(__dirname, 'files-copy');
 
-  fs.readdir(pathToGoalFolder, (err, files) => {
+/*   fs.readdir(pathToGoalFolder, (err, files) => {
     if (err) {
       console.log('error')
     }
@@ -17,7 +20,7 @@ try {
         if(err) console.log('error');
       })
     });
-  })
+  }) */
 
   fs.readdir(pathToSourceFolder, (err, files) => {
     files.forEach(item => {
@@ -30,4 +33,4 @@ try {
   });
 } catch (error) {
   console.log(error.message);
-}
+}})();
