@@ -53,6 +53,17 @@ const promise = require('fs/promises');
 
 
   // copy assets
+
+  (async function() {
+    try {
+      await promise.rm(path.join(__dirname, 'project-dist', 'assets'), { recursive: true, force: true})
+
+    } catch(error) {
+      console.log('here err')
+    }
+  })
+
+
   fs.stat(path.join(__dirname, 'project-dist', 'assets'), (err) => {
     if(err) {
       fs.mkdir(path.join(__dirname, 'project-dist', 'assets'), (err) => {
@@ -88,9 +99,9 @@ const promise = require('fs/promises');
   });
 
   function copyFileFunction(pathToStartFolder, pathToGoalFolder) {
-    fs.readdir(pathToGoalFolder, (err, files) => {
+/*     fs.readdir(pathToGoalFolder, (err, files) => {
       if (err) {
-        /* console.log('error') */
+        console.log('error')
       } else {
         files.forEach(item => {
           fs.unlink(path.join(pathToGoalFolder, item), (err) => {
@@ -98,7 +109,7 @@ const promise = require('fs/promises');
           })
         });
       }
-    });
+    }); */
 
     fs.readdir(pathToStartFolder, (err, files) => {
       if(err) {
@@ -130,6 +141,7 @@ const promise = require('fs/promises');
     };
 
     await promise.writeFile(goalHtmlPath, htmlCode);
+    console.log('all OK')
   }
 
   (async () => {
